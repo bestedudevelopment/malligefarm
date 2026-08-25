@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Employee | Mallige Farm</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="../index.html" class="brand">
+        <div class="brand-icon">🌿</div>
+
+        <div>
+            <h1>Mallige Farm</h1>
+            <span>Agricultural Management</span>
+        </div>
+    </a>
+
+    <button id="logoutButton" class="logout-button">
+        Logout
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <a href="../index.html" class="back">
+        ← Back to Home
+    </a>
+
+    <div class="page-heading">
+        <p>FARM MANAGEMENT</p>
+
+        <h2>Add Employee</h2>
+
+        <span>
+            Register employees who pluck Mallige flowers.
+        </span>
+    </div>
+
+
+    <!-- ADD EMPLOYEE -->
+
+    <section class="card">
+
+        <div class="card-title">
+
+            <div class="icon">
+                👨‍🌾
+            </div>
+
+            <div>
+                <h3>New Employee</h3>
+
+                <p>
+                    Enter the employee code and name.
+                </p>
+            </div>
+
+        </div>
+
+
+        <form id="employeeForm">
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>
+                        Employee Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="employeeCode"
+                        placeholder="Example: 004"
+                        required
+                    >
+
+                    <small>
+                        Enter the worker's permanent number.
+                    </small>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Employee Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="employeeName"
+                        placeholder="Example: Lakshmi"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                id="saveButton"
+                class="save-button"
+            >
+                Add Employee
+            </button>
+
+            <div id="message"></div>
+
+        </form>
+
+    </section>
+
+
+    <!-- EMPLOYEE LIST -->
+
+    <section class="card">
+
+        <div class="list-header">
+
+            <div>
+                <p>REGISTERED EMPLOYEES</p>
+
+                <h3>Employee List</h3>
+            </div>
+
+            <div class="count">
+                <span>Total</span>
+                <strong id="employeeCount">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="search">
+
+            <span>⌕</span>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search employee code or name..."
+            >
+
+        </div>
+
+
+        <div id="employeeList">
+
+            <div class="loading">
+                Loading employees...
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script type="module" src="./app.js"></script>
+
+</body>
+</html>
