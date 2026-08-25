@@ -1,6 +1,5 @@
-
 // ============================================================
-// FIREBASE IMPORTS
+// FIREBASE
 // ============================================================
 
 import { initializeApp }
@@ -8,7 +7,6 @@ from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 
 import {
     getAuth,
-    signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
 }
@@ -39,46 +37,22 @@ const firebaseConfig = {
 
 
 // ============================================================
-// INITIALIZE FIREBASE
+// INITIALIZE
 // ============================================================
 
-const firebaseApp =
+const app =
     initializeApp(firebaseConfig);
 
 const auth =
-    getAuth(firebaseApp);
+    getAuth(app);
 
 const db =
-    getFirestore(firebaseApp);
+    getFirestore(app);
 
 
 // ============================================================
 // ELEMENTS
 // ============================================================
-
-const loginScreen =
-    document.getElementById("loginScreen");
-
-const appScreen =
-    document.getElementById("appScreen");
-
-const loginForm =
-    document.getElementById("loginForm");
-
-const emailInput =
-    document.getElementById("email");
-
-const passwordInput =
-    document.getElementById("password");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const loginMessage =
-    document.getElementById("loginMessage");
-
-const logoutButton =
-    document.getElementById("logoutButton");
 
 const adminName =
     document.getElementById("adminName");
@@ -86,11 +60,14 @@ const adminName =
 const welcomeName =
     document.getElementById("welcomeName");
 
-const todayDisplay =
-    document.getElementById("todayDisplay");
+const logoutButton =
+    document.getElementById("logoutButton");
 
 const selectedDateInput =
     document.getElementById("selectedDate");
+
+const todayDisplay =
+    document.getElementById("todayDisplay");
 
 const dailyRateInput =
     document.getElementById("dailyRate");
@@ -103,7 +80,7 @@ const rateStatus =
 
 
 // ============================================================
-// DATE FUNCTIONS
+// DATE
 // ============================================================
 
 function getTodayString() {
@@ -147,27 +124,137 @@ function formatDate(dateString) {
 // SELECTED DATE
 // ============================================================
 
-// Default to today's date for convenience.
-// Admin can manually change it.
-
 let selectedDate =
     getTodayString();
 
-
-// Put today's date into date picker
 
 selectedDateInput.value =
     selectedDate;
 
 
-// Show date on page
+todayDisplay.textContent =
+    formatDate(selectedDate);
 
-if (todayDisplay) {
 
-    todayDisplay.textContent =
-        formatDate(selectedDate);
+// ============================================================
+// AUTHENTICATION GUARD
+// ============================================================
 
-}
+onAuthStateChanged(
+    auth,
+    async (user) => {
+
+        // --------------------------------------------
+        // NOT LOGGED IN
+        // --------------------------------------------
+
+        if (!user) {
+
+            window.location.href =
+                "./login/";
+
+            return;
+        }
+
+
+        try {
+
+            // ----------------------------------------
+            // GET USER PROFILE
+            // ----------------------------------------
+
+            const userReference =
+                doc(
+                    db,
+                    "users",
+                    user.uid
+                );
+
+
+            const userSnapshot =
+                await getDoc(
+                    userReference
+                );
+
+
+            // ----------------------------------------
+            // PROFILE DOES NOT EXIST
+            // ----------------------------------------
+
+            if (
+                !userSnapshot.exists()
+            ) {
+
+                await signOut(auth);
+
+                window.location.href =
+                    "./login/";
+
+                return;
+            }
+
+
+            const userData =
+                userSnapshot.data();
+
+
+            // ----------------------------------------
+            // ADMIN ONLY
+            // ----------------------------------------
+
+            if (
+                userData.role !== "admin"
+            ) {
+
+                await signOut(auth);
+
+                window.location.href =
+                    "./login/";
+
+                return;
+            }
+
+
+            // ----------------------------------------
+            // ADMIN VERIFIED
+            // ----------------------------------------
+
+            const name =
+                userData.name ||
+                "Admin";
+
+
+            adminName.textContent =
+                name;
+
+
+            welcomeName.textContent =
+                name;
+
+
+            // Load rate for selected date
+
+            await loadSelectedDateRate();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Admin verification error:",
+                error
+            );
+
+
+            await signOut(auth);
+
+            window.location.href =
+                "./login/";
+
+        }
+
+    }
+);
 
 
 // ============================================================
@@ -188,12 +275,8 @@ selectedDateInput.addEventListener(
         }
 
 
-        if (todayDisplay) {
-
-            todayDisplay.textContent =
-                formatDate(selectedDate);
-
-        }
+        todayDisplay.textContent =
+            formatDate(selectedDate);
 
 
         await loadSelectedDateRate();
@@ -203,297 +286,7 @@ selectedDateInput.addEventListener(
 
 
 // ============================================================
-// LOGIN
-// ============================================================
-
-loginForm.addEventListener(
-    "submit",
-    async (event) => {
-
-        event.preventDefault();
-
-
-        const email =
-            emailInput.value.trim();
-
-        const password =
-            passwordInput.value;
-
-
-        loginMessage.textContent =
-            "";
-
-
-        loginButton.disabled =
-            true;
-
-        loginButton.textContent =
-            "Signing in...";
-
-
-        try {
-
-            const credential =
-                await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-
-            const user =
-                credential.user;
-
-
-            // Get admin profile
-
-            const userReference =
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                );
-
-
-            const userSnapshot =
-                await getDoc(
-                    userReference
-                );
-
-
-            if (
-                !userSnapshot.exists()
-            ) {
-
-                await signOut(auth);
-
-                throw new Error(
-                    "Admin profile was not found."
-                );
-
-            }
-
-
-            const userData =
-                userSnapshot.data();
-
-
-            // Admin only
-
-            if (
-                userData.role !== "admin"
-            ) {
-
-                await signOut(auth);
-
-                throw new Error(
-                    "Access denied. Admin access only."
-                );
-
-            }
-
-
-            showApplication(
-                userData
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Login error:",
-                error
-            );
-
-
-            loginMessage.textContent =
-                getFriendlyError(error);
-
-        }
-
-        finally {
-
-            loginButton.disabled =
-                false;
-
-            loginButton.textContent =
-                "Login";
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// AUTH STATE
-// ============================================================
-
-onAuthStateChanged(
-    auth,
-    async (user) => {
-
-        if (!user) {
-
-            showLogin();
-
-            return;
-
-        }
-
-
-        try {
-
-            const userReference =
-                doc(
-                    db,
-                    "users",
-                    user.uid
-                );
-
-
-            const userSnapshot =
-                await getDoc(
-                    userReference
-                );
-
-
-            if (
-                !userSnapshot.exists()
-            ) {
-
-                await signOut(auth);
-
-                return;
-
-            }
-
-
-            const userData =
-                userSnapshot.data();
-
-
-            if (
-                userData.role !== "admin"
-            ) {
-
-                await signOut(auth);
-
-                return;
-
-            }
-
-
-            showApplication(
-                userData
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Authentication check:",
-                error
-            );
-
-
-            await signOut(auth);
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// SHOW APPLICATION
-// ============================================================
-
-function showApplication(
-    userData
-) {
-
-    loginScreen.classList.add(
-        "hidden"
-    );
-
-    appScreen.classList.remove(
-        "hidden"
-    );
-
-
-    const name =
-        userData.name ||
-        "Admin";
-
-
-    adminName.textContent =
-        name;
-
-
-    welcomeName.textContent =
-        name;
-
-
-    // Load rate for currently selected date
-
-    loadSelectedDateRate();
-
-}
-
-
-// ============================================================
-// SHOW LOGIN
-// ============================================================
-
-function showLogin() {
-
-    loginScreen.classList.remove(
-        "hidden"
-    );
-
-    appScreen.classList.add(
-        "hidden"
-    );
-
-}
-
-
-// ============================================================
-// LOGOUT
-// ============================================================
-
-logoutButton.addEventListener(
-    "click",
-    async () => {
-
-        try {
-
-            await signOut(auth);
-
-            loginForm.reset();
-
-            showLogin();
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Logout error:",
-                error
-            );
-
-        }
-
-    }
-);
-
-
-// ============================================================
-// LOAD RATE FOR SELECTED DATE
+// LOAD RATE
 // ============================================================
 
 async function loadSelectedDateRate() {
@@ -501,7 +294,6 @@ async function loadSelectedDateRate() {
     if (!selectedDate) {
 
         return;
-
     }
 
 
@@ -519,18 +311,16 @@ async function loadSelectedDateRate() {
             );
 
 
-        const rateSnapshot =
+        const snapshot =
             await getDoc(
                 rateReference
             );
 
 
-        if (
-            rateSnapshot.exists()
-        ) {
+        if (snapshot.exists()) {
 
             const data =
-                rateSnapshot.data();
+                snapshot.data();
 
 
             dailyRateInput.value =
@@ -542,7 +332,7 @@ async function loadSelectedDateRate() {
                     selectedDate
                 )}: ₹${Number(
                     data.ratePerKg
-                ).toFixed(2)} per KG.`;
+                ).toFixed(2)} / KG`;
 
 
             saveRateButton.textContent =
@@ -578,7 +368,7 @@ async function loadSelectedDateRate() {
 
 
         rateStatus.textContent =
-            getFriendlyError(error);
+            "Unable to load rate.";
 
     }
 
@@ -586,196 +376,157 @@ async function loadSelectedDateRate() {
 
 
 // ============================================================
-// SAVE RATE FOR SELECTED DATE
+// SAVE RATE
 // ============================================================
 
 saveRateButton.addEventListener(
     "click",
-    saveSelectedDateRate
-);
+    async () => {
+
+        if (!selectedDate) {
+
+            rateStatus.textContent =
+                "Please select a date.";
+
+            return;
+        }
 
 
-async function saveSelectedDateRate() {
-
-    // Get current selected date
-
-    selectedDate =
-        selectedDateInput.value;
-
-
-    if (!selectedDate) {
-
-        rateStatus.textContent =
-            "Please select a date.";
-
-        return;
-
-    }
-
-
-    const rate =
-        Number(
-            dailyRateInput.value
-        );
-
-
-    if (
-        !rate ||
-        rate <= 0
-    ) {
-
-        rateStatus.textContent =
-            "Please enter a valid price per KG.";
-
-        dailyRateInput.focus();
-
-        return;
-
-    }
-
-
-    // Make sure admin is logged in
-
-    if (!auth.currentUser) {
-
-        rateStatus.textContent =
-            "Please login again.";
-
-        return;
-
-    }
-
-
-    saveRateButton.disabled =
-        true;
-
-    saveRateButton.textContent =
-        "Saving...";
-
-
-    try {
-
-        const rateReference =
-            doc(
-                db,
-                "dailyRates",
-                selectedDate
+        const rate =
+            Number(
+                dailyRateInput.value
             );
 
 
-        await setDoc(
-            rateReference,
-            {
+        if (
+            !rate ||
+            rate <= 0
+        ) {
 
-                date:
-                    selectedDate,
+            rateStatus.textContent =
+                "Please enter a valid price per KG.";
 
-                ratePerKg:
-                    rate,
+            dailyRateInput.focus();
 
-                updatedAt:
-                    new Date(),
-
-                updatedBy:
-                    auth.currentUser.uid
-
-            },
-            {
-                merge: true
-            }
-        );
+            return;
+        }
 
 
-        rateStatus.textContent =
-            `Saved ₹${rate.toFixed(
-                2
-            )}/KG for ${formatDate(
-                selectedDate
-            )}.`;
+        if (!auth.currentUser) {
 
+            window.location.href =
+                "./login/";
 
-        saveRateButton.textContent =
-            "Update Rate";
+            return;
+        }
 
-    }
-
-    catch (error) {
-
-        console.error(
-            "Rate save error:",
-            error
-        );
-
-
-        rateStatus.textContent =
-            getFriendlyError(error);
-
-
-        saveRateButton.textContent =
-            "Save Rate";
-
-    }
-
-    finally {
 
         saveRateButton.disabled =
-            false;
+            true;
+
+        saveRateButton.textContent =
+            "Saving...";
+
+
+        try {
+
+            const rateReference =
+                doc(
+                    db,
+                    "dailyRates",
+                    selectedDate
+                );
+
+
+            await setDoc(
+                rateReference,
+                {
+
+                    date:
+                        selectedDate,
+
+                    ratePerKg:
+                        rate,
+
+                    updatedAt:
+                        new Date(),
+
+                    updatedBy:
+                        auth.currentUser.uid
+
+                },
+                {
+                    merge: true
+                }
+            );
+
+
+            rateStatus.textContent =
+                `Saved ₹${rate.toFixed(
+                    2
+                )} / KG for ${formatDate(
+                    selectedDate
+                )}.`;
+
+
+            saveRateButton.textContent =
+                "Update Rate";
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Rate save error:",
+                error
+            );
+
+
+            rateStatus.textContent =
+                error.message;
+
+
+            saveRateButton.textContent =
+                "Save Rate";
+
+        }
+
+        finally {
+
+            saveRateButton.disabled =
+                false;
+
+        }
 
     }
-
-}
+);
 
 
 // ============================================================
-// FRIENDLY FIREBASE ERRORS
+// LOGOUT
 // ============================================================
 
-function getFriendlyError(
-    error
-) {
+logoutButton.addEventListener(
+    "click",
+    async () => {
 
-    if (
-        error.code ===
-        "auth/invalid-credential"
-    ) {
+        try {
 
-        return "Invalid email or password.";
+            await signOut(auth);
 
-    }
+            window.location.href =
+                "./login/";
 
+        }
 
-    if (
-        error.code ===
-        "auth/invalid-email"
-    ) {
+        catch (error) {
 
-        return "Please enter a valid email.";
+            console.error(
+                "Logout error:",
+                error
+            );
 
-    }
-
-
-    if (
-        error.code ===
-        "auth/too-many-requests"
-    ) {
-
-        return "Too many attempts. Please try again later.";
+        }
 
     }
-
-
-    if (
-        error.code ===
-        "permission-denied"
-    ) {
-
-        return "Firebase permission denied. Check Firestore rules.";
-
-    }
-
-
-    return error.message ||
-        "Something went wrong.";
-
-}
-
+);
