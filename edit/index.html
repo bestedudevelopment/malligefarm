@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Flower Data | Mallige Farm</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+</head>
+
+<body>
+
+<header class="header">
+
+    <a href="../index.html" class="brand">
+
+        <div class="brand-logo">
+            🌿
+        </div>
+
+        <div>
+            <h1>Mallige Farm</h1>
+            <span>Agricultural Management</span>
+        </div>
+
+    </a>
+
+    <div class="header-right">
+
+        <div class="admin-info">
+            <span>Administrator</span>
+            <strong id="adminName">Admin</strong>
+        </div>
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <a href="../index.html" class="back">
+        ← Back to Home
+    </a>
+
+
+    <section class="heading">
+
+        <p>FLOWER COLLECTION</p>
+
+        <h2>
+            Enter Flower Data
+        </h2>
+
+        <span>
+            Record the quantity plucked by each employee.
+        </span>
+
+    </section>
+
+
+    <!-- DATE -->
+
+    <section class="card date-card">
+
+        <div class="card-heading">
+
+            <div class="small-label">
+                SELECT DATE
+            </div>
+
+            <h3 id="selectedDateText">
+                Select Date
+            </h3>
+
+        </div>
+
+        <input
+            type="date"
+            id="selectedDate"
+        >
+
+    </section>
+
+
+    <!-- RATE -->
+
+    <section class="rate-card">
+
+        <div>
+
+            <span>
+                PLUCKING RATE
+            </span>
+
+            <strong id="rateDisplay">
+                ₹0.00
+            </strong>
+
+            <small>
+                / KG
+            </small>
+
+        </div>
+
+        <p id="rateMessage">
+            Loading rate...
+        </p>
+
+    </section>
+
+
+    <!-- SEARCH EMPLOYEE -->
+
+    <section class="card search-card">
+
+        <div class="small-label">
+            EMPLOYEE
+        </div>
+
+        <h3>
+            Find Employee
+        </h3>
+
+        <p class="description">
+            Search using employee code or name.
+        </p>
+
+
+        <div class="search-box">
+
+            <span>⌕</span>
+
+            <input
+                type="text"
+                id="employeeSearch"
+                placeholder="Example: 004 or Lakshmi"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div
+            id="searchResults"
+            class="search-results"
+        ></div>
+
+    </section>
+
+
+    <!-- SELECTED EMPLOYEE -->
+
+    <section
+        id="employeeCard"
+        class="card employee-card hidden"
+    >
+
+        <div class="employee-header">
+
+            <div class="employee-person">
+
+                <div
+                    id="employeeAvatar"
+                    class="avatar"
+                >
+                    L
+                </div>
+
+                <div>
+
+                    <span
+                        id="employeeCode"
+                        class="employee-code"
+                    >
+                        CODE 004
+                    </span>
+
+                    <h3 id="employeeName">
+                        Lakshmi
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="changeEmployee"
+                class="change-button"
+            >
+                Change
+            </button>
+
+        </div>
+
+
+        <!-- ENTRY -->
+
+        <div class="entry">
+
+            <div class="small-label">
+                DAILY COLLECTION
+            </div>
+
+            <h3>
+                Flower Plucked
+            </h3>
+
+            <p class="description">
+                Enter the total Mallige flower
+                weight collected by this employee.
+            </p>
+
+
+            <label
+                for="weight"
+                class="input-label"
+            >
+                Weight
+            </label>
+
+
+            <div class="weight-box">
+
+                <input
+                    type="number"
+                    id="weight"
+                    min="0"
+                    step="0.001"
+                    placeholder="0.000"
+                >
+
+                <span>
+                    KG
+                </span>
+
+            </div>
+
+
+            <!-- CALCULATION -->
+
+            <div class="calculation">
+
+                <div>
+
+                    <span>
+                        RATE
+                    </span>
+
+                    <strong id="calculationRate">
+                        ₹0.00 / KG
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        WEIGHT
+                    </span>
+
+                    <strong id="calculationWeight">
+                        0.000 KG
+                    </strong>
+
+                </div>
+
+
+                <div class="payment">
+
+                    <span>
+                        PAYMENT
+                    </span>
+
+                    <strong id="calculationPayment">
+                        ₹0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="saveButton"
+                class="save-button"
+            >
+                Save Flower Data
+            </button>
+
+
+            <div
+                id="saveMessage"
+                class="message"
+            ></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXISTING DATA -->
+
+    <section
+        id="recordsCard"
+        class="card records-card hidden"
+    >
+
+        <div class="records-heading">
+
+            <div>
+
+                <div class="small-label">
+                    EMPLOYEE RECORDS
+                </div>
+
+                <h3>
+                    Previous Entries
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div id="recordsList">
+        </div>
+
+    </section>
+
+</main>
+
+
+<script
+    type="module"
+    src="./app.js"
+></script>
+
+</body>
+</html>
