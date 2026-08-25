@@ -6,506 +6,433 @@
 
     <title>Mallige Farm</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
+    <!-- ================= LOGIN ================= -->
 
-<section id="loginScreen" class="screen">
+    <section id="loginScreen" class="login-screen">
 
-    <div class="login-card">
+        <div class="login-card">
 
-        <div class="logo">🌸</div>
-
-        <h1>Mallige Farm</h1>
-
-        <p class="subtitle">
-            Agricultural Management System
-        </p>
-
-        <form id="loginForm">
-
-            <label>Email</label>
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Admin email"
-                required
-            >
-
-            <label>Password</label>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-            >
-
-            <button type="submit" id="loginBtn">
-                Login
-            </button>
-
-            <p id="loginMessage"></p>
-
-        </form>
-
-    </div>
-
-</section>
-
-
-<!-- ================= APPLICATION ================= -->
-
-<section id="appScreen" class="hidden">
-
-    <!-- TOP BAR -->
-
-    <header class="topbar">
-
-        <div>
-            <h1>🌸 Mallige Farm</h1>
-            <p>Agricultural Management</p>
-        </div>
-
-        <div class="user-area">
-
-            <span id="adminName"></span>
-
-            <button id="logoutBtn">
-                Logout
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <!-- NAVIGATION -->
-
-    <nav class="navigation">
-
-        <button class="nav-btn active" data-page="dailyPage">
-            🌸 Daily Entry
-        </button>
-
-        <button class="nav-btn" data-page="employeePage">
-            👨‍🌾 Employees
-        </button>
-
-        <button class="nav-btn" data-page="viewPage">
-            📊 View Data
-        </button>
-
-    </nav>
-
-
-    <!-- ================= DAILY ENTRY ================= -->
-
-    <main id="dailyPage" class="page">
-
-        <div class="page-title">
-
-            <div>
-                <h2>Daily Flower Collection</h2>
-
-                <p>
-                    Record today's Mallige flower plucking
-                </p>
+            <div class="brand-mark">
+                🌿
             </div>
 
-        </div>
+            <h1>Mallige Farm</h1>
 
+            <p class="login-subtitle">
+                Agricultural Management
+            </p>
 
-        <!-- DATE + RATE -->
+            <form id="loginForm">
 
-        <div class="daily-settings">
+                <div class="input-group">
 
-            <div class="setting-box">
-
-                <label>Date</label>
-
-                <input
-                    type="date"
-                    id="entryDate"
-                >
-
-            </div>
-
-
-            <div class="setting-box rate-box">
-
-                <label>
-                    Today's Plucking Price
-                </label>
-
-                <div class="rate-input">
-
-                    <span>₹</span>
+                    <label for="email">
+                        Email
+                    </label>
 
                     <input
-                        type="number"
-                        id="dailyRate"
-                        placeholder="Enter price per KG"
-                        min="0"
-                        step="0.01"
+                        type="email"
+                        id="email"
+                        placeholder="Enter admin email"
+                        autocomplete="email"
+                        required
                     >
 
-                    <span>/ KG</span>
-
                 </div>
 
-                <small>
-                    This rate applies to all employees for this date.
-                </small>
+                <div class="input-group">
 
-            </div>
+                    <label for="password">
+                        Password
+                    </label>
 
-        </div>
-
-
-        <!-- EMPLOYEE ENTRY -->
-
-        <div class="card">
-
-            <div class="card-header">
-
-                <div>
-                    <h3>Flower Plucking Entry</h3>
-
-                    <p>
-                        Enter employee code and today's weight.
-                    </p>
-                </div>
-
-                <button
-                    id="addRowBtn"
-                    class="secondary-btn"
-                >
-                    + Add Row
-                </button>
-
-            </div>
-
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>#</th>
-
-                            <th>Employee Code</th>
-
-                            <th>Employee Name</th>
-
-                            <th>Weight</th>
-
-                            <th>Payment</th>
-
-                            <th></th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="entryTableBody">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-            <div class="daily-total">
-
-                <div>
-                    <span>Total Employees</span>
-                    <strong id="totalEmployees">0</strong>
-                </div>
-
-                <div>
-                    <span>Total Flowers</span>
-                    <strong id="totalWeight">0.000 KG</strong>
-                </div>
-
-                <div>
-                    <span>Total Payment</span>
-                    <strong id="totalPayment">₹0.00</strong>
-                </div>
-
-            </div>
-
-
-            <div class="save-area">
-
-                <p id="dailyMessage"></p>
-
-                <button
-                    id="saveDailyBtn"
-                    class="primary-btn"
-                >
-                    Save Today's Collection
-                </button>
-
-            </div>
-
-        </div>
-
-    </main>
-
-
-    <!-- ================= EMPLOYEE PAGE ================= -->
-
-    <main id="employeePage" class="page hidden">
-
-        <div class="page-title">
-
-            <div>
-                <h2>Employees</h2>
-
-                <p>
-                    Add and manage Mallige flower workers.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="card employee-form-card">
-
-            <h3>Add Employee</h3>
-
-            <form id="employeeForm">
-
-                <div class="form-grid">
-
-                    <div>
-
-                        <label>Employee Code</label>
-
-                        <input
-                            type="text"
-                            id="employeeCode"
-                            placeholder="Example: 004"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div>
-
-                        <label>Employee Name</label>
-
-                        <input
-                            type="text"
-                            id="employeeName"
-                            placeholder="Enter employee name"
-                            required
-                        >
-
-                    </div>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
 
                 </div>
-
 
                 <button
                     type="submit"
-                    class="primary-btn"
-                    id="saveEmployeeBtn"
+                    class="primary-button login-button"
+                    id="loginButton"
                 >
-                    Save Employee
+                    Login
                 </button>
 
-                <p id="employeeMessage"></p>
+                <p
+                    id="loginMessage"
+                    class="message"
+                ></p>
 
             </form>
 
         </div>
 
+    </section>
 
-        <div class="card">
 
-            <div class="card-header">
+    <!-- ================= APPLICATION ================= -->
+
+    <section id="appScreen" class="app-screen hidden">
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🌿
+                </div>
 
                 <div>
-                    <h3>Employee List</h3>
+                    <h1>Mallige Farm</h1>
 
-                    <p>
-                        Registered flower plucking workers.
-                    </p>
+                    <span>
+                        Agricultural Management
+                    </span>
                 </div>
 
             </div>
 
 
-            <div class="table-container">
+            <div class="header-right">
 
-                <table>
+                <div class="admin-info">
 
-                    <thead>
+                    <span class="admin-label">
+                        Administrator
+                    </span>
 
-                        <tr>
-
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Status</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="employeeTableBody">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </main>
-
-
-    <!-- ================= VIEW DATA ================= -->
-
-    <main id="viewPage" class="page hidden">
-
-        <div class="page-title">
-
-            <div>
-                <h2>View Data</h2>
-
-                <p>
-                    View flower collection and payment records.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <div class="date-filter">
-
-                <div>
-
-                    <label>From Date</label>
-
-                    <input
-                        type="date"
-                        id="fromDate"
-                    >
+                    <strong id="adminName">
+                        Admin
+                    </strong>
 
                 </div>
-
-
-                <div>
-
-                    <label>To Date</label>
-
-                    <input
-                        type="date"
-                        id="toDate"
-                    >
-
-                </div>
-
 
                 <button
-                    id="viewReportBtn"
-                    class="primary-btn"
+                    id="logoutButton"
+                    class="logout-button"
                 >
-                    View Report
+                    Logout
                 </button>
 
             </div>
 
-        </div>
+        </header>
 
 
-        <div class="summary-grid">
+        <!-- MAIN -->
 
-            <div class="summary-card">
+        <main class="home-container">
 
-                <span>Total Flowers</span>
+            <!-- WELCOME -->
 
-                <strong id="reportWeight">
-                    0 KG
-                </strong>
+            <section class="welcome-section">
 
-            </div>
+                <div>
 
+                    <p class="eyebrow">
+                        MALLIGE FARM
+                    </p>
 
-            <div class="summary-card">
+                    <h2>
+                        Welcome back, <span id="welcomeName">Admin</span>
+                    </h2>
 
-                <span>Total Wages</span>
+                    <p class="welcome-text">
+                        Manage today's flower plucking,
+                        employees and payment records.
+                    </p>
 
-                <strong id="reportPayment">
-                    ₹0
-                </strong>
+                </div>
 
-            </div>
-
-
-            <div class="summary-card">
-
-                <span>Employees</span>
-
-                <strong id="reportEmployees">
-                    0
-                </strong>
-
-            </div>
-
-        </div>
+            </section>
 
 
-        <div class="card">
+            <!-- TODAY CARD -->
 
-            <div class="table-container">
+            <section class="today-card">
 
-                <table>
+                <div class="today-header">
 
-                    <thead>
+                    <div>
 
-                        <tr>
+                        <p class="section-label">
+                            TODAY
+                        </p>
 
-                            <th>Date</th>
-                            <th>Employee</th>
-                            <th>Weight</th>
-                            <th>Rate</th>
-                            <th>Payment</th>
+                        <h3 id="todayDisplay">
+                            25 August 2026
+                        </h3>
 
-                        </tr>
+                    </div>
 
-                    </thead>
+                    <div class="calendar-icon">
+                        📅
+                    </div>
 
-                    <tbody id="reportTableBody">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</section>
+                </div>
 
 
-<script type="module" src="app.js"></script>
+                <div class="rate-section">
+
+                    <label for="dailyRate">
+                        Today's Plucking Rate
+                    </label>
+
+                    <p class="rate-description">
+                        Enter the amount paid to workers
+                        for every kilogram of flowers plucked today.
+                    </p>
+
+
+                    <div class="rate-input-wrapper">
+
+                        <span class="currency">
+                            ₹
+                        </span>
+
+                        <input
+                            type="number"
+                            id="dailyRate"
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                        >
+
+                        <span class="per-kg">
+                            / KG
+                        </span>
+
+                    </div>
+
+
+                    <p
+                        id="rateStatus"
+                        class="rate-status"
+                    ></p>
+
+
+                    <button
+                        id="saveRateButton"
+                        class="primary-button save-rate-button"
+                    >
+                        Save Today's Rate
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACTIONS -->
+
+            <section class="actions-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="section-label">
+                            FARM MANAGEMENT
+                        </p>
+
+                        <h3>
+                            Quick Actions
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="action-grid">
+
+                    <!-- ADD EMPLOYEE -->
+
+                    <a
+                        href="./addemp/"
+                        class="action-card"
+                    >
+
+                        <div class="action-icon employee-icon">
+                            👨‍🌾
+                        </div>
+
+                        <div class="action-content">
+
+                            <h4>
+                                Add Employee
+                            </h4>
+
+                            <p>
+                                Register a new flower
+                                plucking worker.
+                            </p>
+
+                        </div>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <!-- ENTER DATA -->
+
+                    <a
+                        href="./edit/"
+                        class="action-card"
+                    >
+
+                        <div class="action-icon data-icon">
+                            🌸
+                        </div>
+
+                        <div class="action-content">
+
+                            <h4>
+                                Enter Flower Data
+                            </h4>
+
+                            <p>
+                                Search an employee and
+                                record today's weight.
+                            </p>
+
+                        </div>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <!-- DOWNLOAD REPORT -->
+
+                    <a
+                        href="./download/"
+                        class="action-card"
+                    >
+
+                        <div class="action-icon report-icon">
+                            📄
+                        </div>
+
+                        <div class="action-content">
+
+                            <h4>
+                                Download Report
+                            </h4>
+
+                            <p>
+                                Generate employee payment
+                                statements as PDF.
+                            </p>
+
+                        </div>
+
+                        <span class="arrow">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+            <!-- FOOTER INFO -->
+
+            <section class="info-strip">
+
+                <div class="info-item">
+
+                    <span class="info-icon">
+                        🌱
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Daily Rate
+                        </strong>
+
+                        <span>
+                            Set once for all workers
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-icon">
+                        ⚖️
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Flower Weight
+                        </strong>
+
+                        <span>
+                            Recorded employee-wise
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-icon">
+                        💰
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            Payment
+                        </strong>
+
+                        <span>
+                            Automatically calculated
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </section>
+
+
+    <script
+        type="module"
+        src="./app.js"
+    ></script>
 
 </body>
 </html>
