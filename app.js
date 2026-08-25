@@ -1,3 +1,4 @@
+
 // ============================================================
 // FIREBASE IMPORTS
 // ============================================================
@@ -25,18 +26,15 @@ from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 // ============================================================
 // FIREBASE CONFIG
 // ============================================================
-// PUT YOUR OWN FIREBASE CONFIG HERE
-// ============================================================
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBWLGMTSEccqdnnSnqcuqnH2laPX33DX_k",
-  authDomain: "malligefarms.firebaseapp.com",
-  projectId: "malligefarms",
-  storageBucket: "malligefarms.firebasestorage.app",
-  messagingSenderId: "182446233497",
-  appId: "1:182446233497:web:761445d7236093cf602508",
-  measurementId: "G-8DT0EFXGSN"
+    apiKey: "AIzaSyBWLGMTSEccqdnnSnqcuqnH2laPX33DX_k",
+    authDomain: "malligefarms.firebaseapp.com",
+    projectId: "malligefarms",
+    storageBucket: "malligefarms.firebasestorage.app",
+    messagingSenderId: "182446233497",
+    appId: "1:182446233497:web:761445d7236093cf602508",
+    measurementId: "G-8DT0EFXGSN"
 };
 
 
@@ -91,6 +89,9 @@ const welcomeName =
 const todayDisplay =
     document.getElementById("todayDisplay");
 
+const selectedDateInput =
+    document.getElementById("selectedDate");
+
 const dailyRateInput =
     document.getElementById("dailyRate");
 
@@ -142,20 +143,64 @@ function formatDate(dateString) {
 }
 
 
-let selectedDate = getTodayString();
+// ============================================================
+// SELECTED DATE
+// ============================================================
 
-const selectedDateInput =
-    document.getElementById("selectedDate");
+// Default to today's date for convenience.
+// Admin can manually change it.
 
-selectedDateInput.value = selectedDate;
+let selectedDate =
+    getTodayString();
 
-selectedDateInput.addEventListener("change", () => {
 
-    selectedDate = selectedDateInput.value;
+// Put today's date into date picker
 
-    loadSelectedDateRate();
+selectedDateInput.value =
+    selectedDate;
 
-});
+
+// Show date on page
+
+if (todayDisplay) {
+
+    todayDisplay.textContent =
+        formatDate(selectedDate);
+
+}
+
+
+// ============================================================
+// DATE CHANGE
+// ============================================================
+
+selectedDateInput.addEventListener(
+    "change",
+    async () => {
+
+        selectedDate =
+            selectedDateInput.value;
+
+
+        if (!selectedDate) {
+
+            return;
+        }
+
+
+        if (todayDisplay) {
+
+            todayDisplay.textContent =
+                formatDate(selectedDate);
+
+        }
+
+
+        await loadSelectedDateRate();
+
+    }
+);
+
 
 // ============================================================
 // LOGIN
@@ -167,15 +212,20 @@ loginForm.addEventListener(
 
         event.preventDefault();
 
+
         const email =
             emailInput.value.trim();
 
         const password =
             passwordInput.value;
 
-        loginMessage.textContent = "";
 
-        loginButton.disabled = true;
+        loginMessage.textContent =
+            "";
+
+
+        loginButton.disabled =
+            true;
 
         loginButton.textContent =
             "Signing in...";
@@ -195,9 +245,7 @@ loginForm.addEventListener(
                 credential.user;
 
 
-            // --------------------------------------------
-            // GET FIRESTORE USER PROFILE
-            // --------------------------------------------
+            // Get admin profile
 
             const userReference =
                 doc(
@@ -213,13 +261,16 @@ loginForm.addEventListener(
                 );
 
 
-            if (!userSnapshot.exists()) {
+            if (
+                !userSnapshot.exists()
+            ) {
 
                 await signOut(auth);
 
                 throw new Error(
                     "Admin profile was not found."
                 );
+
             }
 
 
@@ -227,9 +278,7 @@ loginForm.addEventListener(
                 userSnapshot.data();
 
 
-            // --------------------------------------------
-            // ADMIN ONLY
-            // --------------------------------------------
+            // Admin only
 
             if (
                 userData.role !== "admin"
@@ -240,6 +289,7 @@ loginForm.addEventListener(
                 throw new Error(
                     "Access denied. Admin access only."
                 );
+
             }
 
 
@@ -256,19 +306,20 @@ loginForm.addEventListener(
                 error
             );
 
+
             loginMessage.textContent =
-                getFriendlyError(
-                    error
-                );
+                getFriendlyError(error);
 
         }
 
         finally {
 
-            loginButton.disabled = false;
+            loginButton.disabled =
+                false;
 
             loginButton.textContent =
                 "Login";
+
         }
 
     }
@@ -288,6 +339,7 @@ onAuthStateChanged(
             showLogin();
 
             return;
+
         }
 
 
@@ -307,11 +359,14 @@ onAuthStateChanged(
                 );
 
 
-            if (!userSnapshot.exists()) {
+            if (
+                !userSnapshot.exists()
+            ) {
 
                 await signOut(auth);
 
                 return;
+
             }
 
 
@@ -326,6 +381,7 @@ onAuthStateChanged(
                 await signOut(auth);
 
                 return;
+
             }
 
 
@@ -341,6 +397,7 @@ onAuthStateChanged(
                 "Authentication check:",
                 error
             );
+
 
             await signOut(auth);
 
@@ -375,11 +432,15 @@ function showApplication(
     adminName.textContent =
         name;
 
+
     welcomeName.textContent =
         name;
 
 
-    loadTodayRate();
+    // Load rate for currently selected date
+
+    loadSelectedDateRate();
+
 }
 
 
@@ -396,6 +457,7 @@ function showLogin() {
     appScreen.classList.add(
         "hidden"
     );
+
 }
 
 
@@ -431,13 +493,20 @@ logoutButton.addEventListener(
 
 
 // ============================================================
-// LOAD TODAY'S RATE
+// LOAD RATE FOR SELECTED DATE
 // ============================================================
 
-async function loadTodayRate() {
+async function loadSelectedDateRate() {
+
+    if (!selectedDate) {
+
+        return;
+
+    }
+
 
     rateStatus.textContent =
-        "Checking today's rate...";
+        "Checking saved rate...";
 
 
     try {
@@ -446,7 +515,7 @@ async function loadTodayRate() {
             doc(
                 db,
                 "dailyRates",
-                today
+                selectedDate
             );
 
 
@@ -469,12 +538,15 @@ async function loadTodayRate() {
 
 
             rateStatus.textContent =
-                `Today's rate is ₹${Number(
+                `Saved rate for ${formatDate(
+                    selectedDate
+                )}: ₹${Number(
                     data.ratePerKg
                 ).toFixed(2)} per KG.`;
 
+
             saveRateButton.textContent =
-                "Update Today's Rate";
+                "Update Rate";
 
         }
 
@@ -483,11 +555,16 @@ async function loadTodayRate() {
             dailyRateInput.value =
                 "";
 
+
             rateStatus.textContent =
-                "Today's rate has not been entered yet.";
+                `No rate saved for ${formatDate(
+                    selectedDate
+                )}.`;
+
 
             saveRateButton.textContent =
-                "Save Today's Rate";
+                "Save Rate";
+
         }
 
     }
@@ -499,8 +576,9 @@ async function loadTodayRate() {
             error
         );
 
+
         rateStatus.textContent =
-            "Unable to load today's rate.";
+            getFriendlyError(error);
 
     }
 
@@ -508,16 +586,32 @@ async function loadTodayRate() {
 
 
 // ============================================================
-// SAVE TODAY'S RATE
+// SAVE RATE FOR SELECTED DATE
 // ============================================================
 
 saveRateButton.addEventListener(
     "click",
-    saveTodayRate
+    saveSelectedDateRate
 );
 
 
-async function saveTodayRate() {
+async function saveSelectedDateRate() {
+
+    // Get current selected date
+
+    selectedDate =
+        selectedDateInput.value;
+
+
+    if (!selectedDate) {
+
+        rateStatus.textContent =
+            "Please select a date.";
+
+        return;
+
+    }
+
 
     const rate =
         Number(
@@ -536,6 +630,19 @@ async function saveTodayRate() {
         dailyRateInput.focus();
 
         return;
+
+    }
+
+
+    // Make sure admin is logged in
+
+    if (!auth.currentUser) {
+
+        rateStatus.textContent =
+            "Please login again.";
+
+        return;
+
     }
 
 
@@ -552,7 +659,7 @@ async function saveTodayRate() {
             doc(
                 db,
                 "dailyRates",
-                today
+                selectedDate
             );
 
 
@@ -560,9 +667,11 @@ async function saveTodayRate() {
             rateReference,
             {
 
-                date: today,
+                date:
+                    selectedDate,
 
-                ratePerKg: rate,
+                ratePerKg:
+                    rate,
 
                 updatedAt:
                     new Date(),
@@ -578,15 +687,15 @@ async function saveTodayRate() {
 
 
         rateStatus.textContent =
-            `Saved: ₹${rate.toFixed(
+            `Saved ₹${rate.toFixed(
                 2
-            )} per KG for ${formatDate(
-                today
+            )}/KG for ${formatDate(
+                selectedDate
             )}.`;
 
 
         saveRateButton.textContent =
-            "Update Today's Rate";
+            "Update Rate";
 
     }
 
@@ -597,13 +706,13 @@ async function saveTodayRate() {
             error
         );
 
+
         rateStatus.textContent =
-            getFriendlyError(
-                error
-            );
+            getFriendlyError(error);
+
 
         saveRateButton.textContent =
-            "Save Today's Rate";
+            "Save Rate";
 
     }
 
@@ -667,4 +776,6 @@ function getFriendlyError(
 
     return error.message ||
         "Something went wrong.";
+
 }
+
