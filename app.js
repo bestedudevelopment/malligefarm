@@ -22,17 +22,32 @@ from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
 // ============================================================
-// FIREBASE CONFIG
+// SAME FIREBASE CONFIG
 // ============================================================
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBWLGMTSEccqdnnSnqcuqnH2laPX33DX_k",
-    authDomain: "malligefarms.firebaseapp.com",
-    projectId: "malligefarms",
-    storageBucket: "malligefarms.firebasestorage.app",
-    messagingSenderId: "182446233497",
-    appId: "1:182446233497:web:761445d7236093cf602508",
-    measurementId: "G-8DT0EFXGSN"
+
+    apiKey:
+        "AIzaSyBWLGMTSEccqdnnSnqcuqnH2laPX33DX_k",
+
+    authDomain:
+        "malligefarms.firebaseapp.com",
+
+    projectId:
+        "malligefarms",
+
+    storageBucket:
+        "malligefarms.firebasestorage.app",
+
+    messagingSenderId:
+        "182446233497",
+
+    appId:
+        "1:182446233497:web:761445d7236093cf602508",
+
+    measurementId:
+        "G-8DT0EFXGSN"
+
 };
 
 
@@ -40,14 +55,14 @@ const firebaseConfig = {
 // INITIALIZE
 // ============================================================
 
-const app =
+const firebaseApp =
     initializeApp(firebaseConfig);
 
 const auth =
-    getAuth(app);
+    getAuth(firebaseApp);
 
 const db =
-    getFirestore(app);
+    getFirestore(firebaseApp);
 
 
 // ============================================================
@@ -55,54 +70,76 @@ const db =
 // ============================================================
 
 const adminName =
-    document.getElementById("adminName");
+    document.getElementById(
+        "adminName"
+    );
 
 const welcomeName =
-    document.getElementById("welcomeName");
+    document.getElementById(
+        "welcomeName"
+    );
 
 const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+        "logoutButton"
+    );
 
 const selectedDateInput =
-    document.getElementById("selectedDate");
+    document.getElementById(
+        "selectedDate"
+    );
 
-const todayDisplay =
-    document.getElementById("todayDisplay");
+const selectedDateText =
+    document.getElementById(
+        "selectedDateText"
+    );
 
 const dailyRateInput =
-    document.getElementById("dailyRate");
-
-const saveRateButton =
-    document.getElementById("saveRateButton");
+    document.getElementById(
+        "dailyRate"
+    );
 
 const rateStatus =
-    document.getElementById("rateStatus");
+    document.getElementById(
+        "rateStatus"
+    );
+
+const saveRateButton =
+    document.getElementById(
+        "saveRateButton"
+    );
 
 
 // ============================================================
-// DATE
+// DATE HELPERS
 // ============================================================
 
 function getTodayString() {
 
-    const now = new Date();
+    const now =
+        new Date();
 
     const year =
         now.getFullYear();
 
     const month =
-        String(now.getMonth() + 1)
-            .padStart(2, "0");
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
 
     const day =
-        String(now.getDate())
-            .padStart(2, "0");
+        String(
+            now.getDate()
+        ).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
+
 }
 
 
-function formatDate(dateString) {
+function formatDate(
+    dateString
+) {
 
     const date =
         new Date(
@@ -112,16 +149,18 @@ function formatDate(dateString) {
     return date.toLocaleDateString(
         "en-IN",
         {
+            weekday: "long",
             day: "numeric",
             month: "long",
             year: "numeric"
         }
     );
+
 }
 
 
 // ============================================================
-// SELECTED DATE
+// INITIAL DATE
 // ============================================================
 
 let selectedDate =
@@ -132,12 +171,14 @@ selectedDateInput.value =
     selectedDate;
 
 
-todayDisplay.textContent =
-    formatDate(selectedDate);
+selectedDateText.textContent =
+    formatDate(
+        selectedDate
+    );
 
 
 // ============================================================
-// AUTHENTICATION GUARD
+// ADMIN SECURITY GUARD
 // ============================================================
 
 onAuthStateChanged(
@@ -154,13 +195,14 @@ onAuthStateChanged(
                 "./login/";
 
             return;
+
         }
 
 
         try {
 
             // ----------------------------------------
-            // GET USER PROFILE
+            // USER PROFILE
             // ----------------------------------------
 
             const userReference =
@@ -178,19 +220,22 @@ onAuthStateChanged(
 
 
             // ----------------------------------------
-            // PROFILE DOES NOT EXIST
+            // NO PROFILE
             // ----------------------------------------
 
             if (
                 !userSnapshot.exists()
             ) {
 
-                await signOut(auth);
+                await signOut(
+                    auth
+                );
 
                 window.location.href =
                     "./login/";
 
                 return;
+
             }
 
 
@@ -203,15 +248,19 @@ onAuthStateChanged(
             // ----------------------------------------
 
             if (
-                userData.role !== "admin"
+                userData.role !==
+                "admin"
             ) {
 
-                await signOut(auth);
+                await signOut(
+                    auth
+                );
 
                 window.location.href =
                     "./login/";
 
                 return;
+
             }
 
 
@@ -232,9 +281,9 @@ onAuthStateChanged(
                 name;
 
 
-            // Load rate for selected date
+            // Load selected date rate
 
-            await loadSelectedDateRate();
+            await loadRate();
 
         }
 
@@ -246,7 +295,10 @@ onAuthStateChanged(
             );
 
 
-            await signOut(auth);
+            await signOut(
+                auth
+            );
+
 
             window.location.href =
                 "./login/";
@@ -272,33 +324,38 @@ selectedDateInput.addEventListener(
         if (!selectedDate) {
 
             return;
+
         }
 
 
-        todayDisplay.textContent =
-            formatDate(selectedDate);
+        selectedDateText.textContent =
+            formatDate(
+                selectedDate
+            );
 
 
-        await loadSelectedDateRate();
+        await loadRate();
 
     }
 );
 
 
 // ============================================================
-// LOAD RATE
+// LOAD RATE FOR SELECTED DATE
 // ============================================================
 
-async function loadSelectedDateRate() {
-
-    if (!selectedDate) {
-
-        return;
-    }
-
+async function loadRate() {
 
     rateStatus.textContent =
         "Checking saved rate...";
+
+
+    dailyRateInput.disabled =
+        true;
+
+
+    saveRateButton.disabled =
+        true;
 
 
     try {
@@ -317,28 +374,45 @@ async function loadSelectedDateRate() {
             );
 
 
-        if (snapshot.exists()) {
+        // ----------------------------------------
+        // RATE EXISTS
+        // ----------------------------------------
+
+        if (
+            snapshot.exists()
+        ) {
 
             const data =
                 snapshot.data();
 
 
+            const rate =
+                Number(
+                    data.ratePerKg
+                );
+
+
             dailyRateInput.value =
-                data.ratePerKg;
+                rate;
 
 
             rateStatus.textContent =
                 `Saved rate for ${formatDate(
                     selectedDate
-                )}: ₹${Number(
-                    data.ratePerKg
-                ).toFixed(2)} / KG`;
+                )}: ₹${rate.toFixed(
+                    2
+                )} / KG`;
 
 
             saveRateButton.textContent =
                 "Update Rate";
 
         }
+
+
+        // ----------------------------------------
+        // NO RATE
+        // ----------------------------------------
 
         else {
 
@@ -349,7 +423,7 @@ async function loadSelectedDateRate() {
             rateStatus.textContent =
                 `No rate saved for ${formatDate(
                     selectedDate
-                )}.`;
+                )}. Enter the rate below.`;
 
 
             saveRateButton.textContent =
@@ -357,18 +431,32 @@ async function loadSelectedDateRate() {
 
         }
 
+
+        dailyRateInput.disabled =
+            false;
+
+        saveRateButton.disabled =
+            false;
+
     }
 
     catch (error) {
 
         console.error(
-            "Rate loading error:",
+            "Load rate error:",
             error
         );
 
 
         rateStatus.textContent =
-            "Unable to load rate.";
+            "Unable to load the rate. Check Firebase permissions.";
+
+
+        dailyRateInput.disabled =
+            false;
+
+        saveRateButton.disabled =
+            false;
 
     }
 
@@ -376,12 +464,26 @@ async function loadSelectedDateRate() {
 
 
 // ============================================================
-// SAVE RATE
+// SAVE / UPDATE RATE
 // ============================================================
 
 saveRateButton.addEventListener(
     "click",
     async () => {
+
+        if (!auth.currentUser) {
+
+            window.location.href =
+                "./login/";
+
+            return;
+
+        }
+
+
+        selectedDate =
+            selectedDateInput.value;
+
 
         if (!selectedDate) {
 
@@ -389,6 +491,7 @@ saveRateButton.addEventListener(
                 "Please select a date.";
 
             return;
+
         }
 
 
@@ -399,7 +502,7 @@ saveRateButton.addEventListener(
 
 
         if (
-            !rate ||
+            !Number.isFinite(rate) ||
             rate <= 0
         ) {
 
@@ -409,19 +512,14 @@ saveRateButton.addEventListener(
             dailyRateInput.focus();
 
             return;
-        }
 
-
-        if (!auth.currentUser) {
-
-            window.location.href =
-                "./login/";
-
-            return;
         }
 
 
         saveRateButton.disabled =
+            true;
+
+        dailyRateInput.disabled =
             true;
 
         saveRateButton.textContent =
@@ -448,11 +546,11 @@ saveRateButton.addEventListener(
                     ratePerKg:
                         rate,
 
-                    updatedAt:
-                        new Date(),
-
                     updatedBy:
-                        auth.currentUser.uid
+                        auth.currentUser.uid,
+
+                    updatedAt:
+                        new Date()
 
                 },
                 {
@@ -462,9 +560,9 @@ saveRateButton.addEventListener(
 
 
             rateStatus.textContent =
-                `Saved ₹${rate.toFixed(
+                `₹${rate.toFixed(
                     2
-                )} / KG for ${formatDate(
+                )} / KG saved for ${formatDate(
                     selectedDate
                 )}.`;
 
@@ -477,13 +575,13 @@ saveRateButton.addEventListener(
         catch (error) {
 
             console.error(
-                "Rate save error:",
+                "Save rate error:",
                 error
             );
 
 
             rateStatus.textContent =
-                error.message;
+                "Unable to save. Check Firestore permissions.";
 
 
             saveRateButton.textContent =
@@ -494,6 +592,9 @@ saveRateButton.addEventListener(
         finally {
 
             saveRateButton.disabled =
+                false;
+
+            dailyRateInput.disabled =
                 false;
 
         }
@@ -512,7 +613,9 @@ logoutButton.addEventListener(
 
         try {
 
-            await signOut(auth);
+            await signOut(
+                auth
+            );
 
             window.location.href =
                 "./login/";
