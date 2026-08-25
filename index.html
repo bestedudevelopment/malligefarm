@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mallige Farm Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <section id="loginScreen" class="screen">
+
+        <div class="login-card">
+
+            <div class="logo">
+                🌸
+            </div>
+
+            <h1>Mallige Farm</h1>
+
+            <p class="subtitle">
+                Agricultural Management System
+            </p>
+
+            <form id="loginForm">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter admin email"
+                    required
+                >
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter password"
+                    required
+                >
+
+                <button type="submit" id="loginBtn">
+                    Login
+                </button>
+
+                <p id="loginMessage"></p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- MAIN APPLICATION -->
+    <section id="appScreen" class="screen hidden">
+
+        <header class="topbar">
+
+            <div>
+                <h1>🌸 Mallige Farm</h1>
+                <p>Agricultural Management</p>
+            </div>
+
+            <div class="user-area">
+                <span id="adminName"></span>
+                <button id="logoutBtn">Logout</button>
+            </div>
+
+        </header>
+
+
+        <main class="dashboard">
+
+            <div class="welcome-card">
+
+                <h2>Welcome, Admin</h2>
+
+                <p>
+                    Manage employees, daily flower collection
+                    and payments from here.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+                <div class="menu-card">
+
+                    <div class="menu-icon">👨‍🌾</div>
+
+                    <h3>Employees</h3>
+
+                    <p>
+                        Add and manage flower plucking workers.
+                    </p>
+
+                    <button>
+                        Add Employee
+                    </button>
+
+                </div>
+
+
+                <div class="menu-card">
+
+                    <div class="menu-icon">🌸</div>
+
+                    <h3>Daily Collection</h3>
+
+                    <p>
+                        Record today's flower plucking
+                        and payment.
+                    </p>
+
+                    <button>
+                        Daily Entry
+                    </button>
+
+                </div>
+
+
+                <div class="menu-card">
+
+                    <div class="menu-icon">📊</div>
+
+                    <h3>View Data</h3>
+
+                    <p>
+                        View employee-wise and
+                        date-wise reports.
+                    </p>
+
+                    <button>
+                        View Reports
+                    </button>
+
+                </div>
+
+
+                <div class="menu-card">
+
+                    <div class="menu-icon">📄</div>
+
+                    <h3>PDF Reports</h3>
+
+                    <p>
+                        Generate employee and
+                        daily payment statements.
+                    </p>
+
+                    <button>
+                        Reports
+                    </button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
+
+
+    <script type="module" src="app.js"></script>
+
+</body>
+</html>
