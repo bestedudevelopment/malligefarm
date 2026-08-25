@@ -142,13 +142,20 @@ function formatDate(dateString) {
 }
 
 
-const today =
-    getTodayString();
+let selectedDate = getTodayString();
 
+const selectedDateInput =
+    document.getElementById("selectedDate");
 
-todayDisplay.textContent =
-    formatDate(today);
+selectedDateInput.value = selectedDate;
 
+selectedDateInput.addEventListener("change", () => {
+
+    selectedDate = selectedDateInput.value;
+
+    loadSelectedDateRate();
+
+});
 
 // ============================================================
 // LOGIN
