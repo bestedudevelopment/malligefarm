@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Download Report | Mallige Farm</title>
+
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <a href="../index.html" class="brand">
+
+        <div class="brand-logo">
+            🌿
+        </div>
+
+        <div>
+            <h1>Mallige Farm</h1>
+            <span>Agricultural Management</span>
+        </div>
+
+    </a>
+
+
+    <div class="header-right">
+
+        <div class="admin-info">
+
+            <span>Administrator</span>
+
+            <strong id="adminName">
+                Admin
+            </strong>
+
+        </div>
+
+
+        <button
+            id="logoutButton"
+            class="logout-button"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<main class="page">
+
+
+    <a
+        href="../index.html"
+        class="back"
+    >
+        ← Back to Home
+    </a>
+
+
+    <section class="heading">
+
+        <p>PAYMENT REPORTS</p>
+
+        <h2>
+            Download Employee Report
+        </h2>
+
+        <span>
+            Select an employee and date range
+            to view their flower collection and payment.
+        </span>
+
+    </section>
+
+
+
+    <!-- EMPLOYEE -->
+
+    <section class="card">
+
+        <div class="small-label">
+            EMPLOYEE
+        </div>
+
+        <h3>
+            Select Employee
+        </h3>
+
+        <p class="description">
+            Search by employee code or name.
+        </p>
+
+
+        <div class="search-box">
+
+            <span>⌕</span>
+
+            <input
+                type="text"
+                id="employeeSearch"
+                placeholder="Search code or employee name"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div
+            id="searchResults"
+            class="search-results"
+        ></div>
+
+
+        <!-- SELECTED -->
+
+        <div
+            id="selectedEmployee"
+            class="selected-employee hidden"
+        >
+
+            <div class="avatar" id="employeeAvatar">
+                L
+            </div>
+
+            <div>
+
+                <span id="employeeCode">
+                    CODE 004
+                </span>
+
+                <strong id="employeeName">
+                    Lakshmi
+                </strong>
+
+            </div>
+
+
+            <button
+                id="changeEmployee"
+                class="change-button"
+            >
+                Change
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- DATE RANGE -->
+
+    <section class="card">
+
+        <div class="small-label">
+            DATE RANGE
+        </div>
+
+        <h3>
+            Select Dates
+        </h3>
+
+        <p class="description">
+            Only entries between these dates
+            will be included in the report.
+        </p>
+
+
+        <div class="date-grid">
+
+            <div>
+
+                <label for="fromDate">
+                    From Date
+                </label>
+
+                <input
+                    type="date"
+                    id="fromDate"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label for="toDate">
+                    To Date
+                </label>
+
+                <input
+                    type="date"
+                    id="toDate"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="viewReportButton"
+            class="view-button"
+        >
+            View Report
+        </button>
+
+
+        <div
+            id="reportMessage"
+            class="message"
+        ></div>
+
+    </section>
+
+
+
+    <!-- REPORT -->
+
+    <section
+        id="reportCard"
+        class="report-card hidden"
+    >
+
+
+        <!-- REPORT HEADER -->
+
+        <div class="report-header">
+
+            <div>
+
+                <p>
+                    MALLIGE FARM
+                </p>
+
+                <h3>
+                    Flower Plucking Statement
+                </h3>
+
+                <span id="reportPeriod">
+                </span>
+
+            </div>
+
+
+            <div class="report-employee">
+
+                <strong id="reportEmployeeName">
+                    Lakshmi
+                </strong>
+
+                <span id="reportEmployeeCode">
+                    Employee 004
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TOTALS -->
+
+        <div class="totals">
+
+            <div>
+
+                <span>
+                    TOTAL DAYS
+                </span>
+
+                <strong id="totalDays">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    TOTAL FLOWERS
+                </span>
+
+                <strong id="totalWeight">
+                    0.000 KG
+                </strong>
+
+            </div>
+
+
+            <div class="total-payment">
+
+                <span>
+                    TOTAL PAYMENT
+                </span>
+
+                <strong id="totalPayment">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date</th>
+
+                        <th>Flower</th>
+
+                        <th>Rate / KG</th>
+
+                        <th>Payment</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="reportTable"
+                >
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+
+        <!-- DOWNLOAD -->
+
+        <button
+            id="downloadPdfButton"
+            class="download-button"
+        >
+            Download PDF
+        </button>
+
+
+    </section>
+
+
+</main>
+
+
+<script
+    type="module"
+    src="./app.js"
+></script>
+
+
+</body>
+</html>
