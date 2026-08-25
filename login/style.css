@@ -1,0 +1,475 @@
+:root {
+
+    --olive: #566b32;
+
+    --olive-dark: #3f5124;
+
+    --olive-light: #edf2e5;
+
+    --olive-pale: #f6f8f1;
+
+    --text: #20251c;
+
+    --muted: #73796c;
+
+    --border: #dfe5d7;
+
+    --white: #ffffff;
+
+    --red: #c94b43;
+
+    --green: #527b3a;
+
+}
+
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.login-page {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 24px;
+
+    background:
+
+        radial-gradient(
+            circle at 15% 10%,
+            #e7eedc 0,
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 90% 90%,
+            #e9efdf 0,
+            transparent 35%
+        ),
+
+        var(--olive-pale);
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.login-card {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 42px;
+
+    background: var(--white);
+
+    border: 1px solid var(--border);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(54, 68, 37, 0.10);
+
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.brand {
+
+    text-align: center;
+
+    margin-bottom: 34px;
+
+}
+
+
+.brand-icon {
+
+    width: 64px;
+
+    height: 64px;
+
+    margin: 0 auto 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: var(--olive-light);
+
+    font-size: 30px;
+
+}
+
+
+.brand h1 {
+
+    font-size: 25px;
+
+    letter-spacing: -0.5px;
+
+}
+
+
+.brand p {
+
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.login-heading {
+
+    margin-bottom: 25px;
+
+}
+
+
+.login-heading > span {
+
+    color: var(--olive);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+}
+
+
+.login-heading h2 {
+
+    margin-top: 7px;
+
+    font-size: 23px;
+
+    letter-spacing: -0.4px;
+
+}
+
+
+.login-heading p {
+
+    margin-top: 6px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.field {
+
+    margin-bottom: 18px;
+
+}
+
+
+.field label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+}
+
+
+.field input {
+
+    width: 100%;
+
+    height: 50px;
+
+    padding: 0 14px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #fbfcf9;
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+
+}
+
+
+.field input::placeholder {
+
+    color: #a1a69c;
+
+}
+
+
+.field input:focus {
+
+    border-color: var(--olive);
+
+    background: white;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(86, 107, 50, 0.10);
+
+}
+
+
+/* =========================================================
+   PASSWORD
+========================================================= */
+
+.password-label {
+
+    display: flex;
+
+    justify-content: space-between;
+
+}
+
+
+.password-wrapper {
+
+    position: relative;
+
+}
+
+
+.password-wrapper input {
+
+    padding-right: 70px;
+
+}
+
+
+.password-toggle {
+
+    position: absolute;
+
+    right: 10px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--olive);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    padding: 6px;
+
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+.login-button {
+
+    width: 100%;
+
+    height: 50px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: var(--olive);
+
+    color: white;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    transition:
+        background 0.2s,
+        transform 0.15s;
+
+}
+
+
+.login-button:hover {
+
+    background: var(--olive-dark);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.login-button:disabled {
+
+    opacity: 0.6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+.login-message {
+
+    min-height: 20px;
+
+    margin-top: 13px;
+
+    text-align: center;
+
+    color: var(--red);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.login-footer {
+
+    margin-top: 28px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid var(--border);
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 500px) {
+
+    .login-page {
+
+        padding: 15px;
+
+    }
+
+
+    .login-card {
+
+        padding: 32px 23px;
+
+        border-radius: 18px;
+
+    }
+
+
+    .brand {
+
+        margin-bottom: 28px;
+
+    }
+
+
+    .brand-icon {
+
+        width: 58px;
+
+        height: 58px;
+
+        font-size: 27px;
+
+    }
+
+}
